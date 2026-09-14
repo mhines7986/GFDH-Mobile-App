@@ -1,0 +1,11 @@
+{
+  "name": "Alexis & Mark's Game for Disgusting Humans",
+  "short_name": "Disgusting Humans",
+  "description": "A game for disgusting humans.",
+  "start_url": "./GFDH.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#110b25",
+  "background_color": "#03020a"
+}

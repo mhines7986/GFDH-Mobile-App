@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexis & Mark's Game for Disgusting Humans</title>
+    <!-- Display and interface fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#110b25">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+
+    <!-- MAIN PAGE CONTAINER -->
+    <div class="container">
+        <h1>
+            <span class="title-credit">Alexis &amp; Mark's</span>
+            <span class="title-main">Game for<br>Disgusting Humans</span>
+        </h1>
+        
+        <!-- TOP: ACTIVITY RANDOMIZER -->
+        <div class="category-badge" id="categoryBadge">Kinky</div>
+        <div class="activity">
+            <div class="slot title" id="titleSlot">
+                <div class="slot-text" id="titleText"></div>
+            </div>
+            <div class="slot description" id="descriptionSlot">
+                <div class="slot-text" id="descriptionText"></div>
+            </div>
+        </div>
+
+        <!-- ROOM CATEGORY FILTER BUTTONS -->
+        <div class="category-options" id="categoryOptions">
+            <button data-category="Kinky" class="cat-btn active">Kinky</button>
+            <button data-category="Kinkier" class="cat-btn">Kinkier</button>
+            <button data-category="Filthy" class="cat-btn">Filthy</button>
+            <button data-category="Roulette" class="cat-btn">Roulette</button>
+        </div>
+
+        <div class="buttons">
+            <button class="main" id="randomBtn" aria-label="Get Lucky" title="Get Lucky"><span>Get Lucky</span></button>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- BOTTOM: TIMER & CONTROLS -->
+        <div class="timer" id="timer">2:00</div>
+        <div class="timer-progress" aria-hidden="true">
+            <div class="timer-progress-bar" id="timerProgressBar"></div>
+        </div>
+        
+        <div class="timer-options">
+            <button data-time="60" class="timer-opt-btn">1 Min</button>
+            <button data-time="120" class="timer-opt-btn active">2 Min</button>
+            <button data-time="180" class="timer-opt-btn">3 Min</button>
+            <button data-time="300" class="timer-opt-btn">5 Min</button>
+        </div>
+
+        <div class="buttons">
+            <button class="secondary start-timer-btn">Start Timer</button>
+            <button class="secondary reset-timer-btn">Reset Timer</button>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN ACTIVITY POP-OUT MODAL -->
+    <div class="modal-backdrop" id="activityModalBackdrop">
+        <div class="modal-card">
+            <button class="close-btn" id="closeActivityBtn" title="Close Pop-Out">&times;</button>
+            <div class="category-badge" id="modalCategoryBadge">Kinky</div>
+            
+            <div class="activity modal-activity">
+                <div class="slot title" id="modalTitleSlot">
+                    <div class="slot-text" id="modalTitleText"></div>
+                </div>
+                <div class="slot description" id="modalDescriptionSlot">
+                    <div class="slot-text" id="modalDescriptionText"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN TIMER POP-OUT MODAL -->
+    <div class="modal-backdrop" id="timerModalBackdrop">
+        <div class="modal-card">
+            <button class="close-btn" id="closeTimerBtn" title="Close Pop-Out">&times;</button>
+            
+            <div class="timer" id="modalTimer">2:00</div>
+            <div class="timer-progress" aria-hidden="true">
+                <div class="timer-progress-bar" id="modalTimerProgressBar"></div>
+            </div>
+        
+            <div class="timer-options">
+                <button data-time="60" class="timer-opt-btn">1 Min</button>
+                <button data-time="120" class="timer-opt-btn active">2 Min</button>
+                <button data-time="180" class="timer-opt-btn">3 Min</button>
+                <button data-time="300" class="timer-opt-btn">5 Min</button>
+            </div>
+
+            <div class="buttons">
+                <button class="main start-timer-btn">Start Timer</button>
+                <button class="secondary reset-timer-btn">Reset Timer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Categorized cleaning activities array
+        const categorizedActivities = [
+            // Kinky
+{ category: "Kinky", text: "Foot Worship Massage - They massage your feet, then worship each toe with their mouth" },
+{ category: "Kinky", text: "Hand Kiss Devotion - You spend 60 seconds reverently kissing and sucking each of their fingers, then their palm, then their wrist, treating their hand like royalty" },
+{ category: "Kinky", text: "Body Part Worship - You pick a body part of theirs to worship for 60 seconds, kissing, licking, and showing devotion to that specific area" },
+{ category: "Kinky", text: "Body Part Worship Choice - They choose one body part for you to worship with your mouth" },
+{ category: "Kinky", text: "Reverse Body Worship - They worship a body part of your choosing, giving their complete attention to whatever you select" },
+{ category: "Kinky", text: "Nipple Play Session - You suck, lick, and gently bite their nipples while they play with yours, the dual stimulation driving you both wild" },
+{ category: "Kinky", text: "Guided Mutual Masturbation - They place their hands over yours, showing you exactly how they like to be touched while you do the same to them" },
+{ category: "Kinky", text: "Mutual Masturbation Instruction - They tell you exactly how to touch yourself while they masturbate too, describing in detail what they want to see" },
+{ category: "Kinky", text: "The Fusion Position - You both sit facing each other, legs wrapped around each other, grinding and rocking together" },
+{ category: "Kinky", text: "The Sidekick - Both lying on sides facing same direction, they enter from behind while spooning but with your top leg lifted high for deep access" },
+{ category: "Kinky", text: "The Love Chair - They sit, you straddle with your back to them, reverse cowgirl on a chair for different angle and depth" },
+{ category: "Kinky", text: "The Hot Seat - They sit on sturdy chair, you sit on them facing away, then lean forward putting hands on floor, them thrusting up into you from below" },
+{ category: "Kinky", text: "The Crab Position - You crab-walk on hands and feet, pelvis lifted high, them penetrating from below at upward angle, hitting different spots" },
+{ category: "Kinky", text: "The Splitting Bamboo - You lie on back, one leg up over their shoulder, other leg out wide, deep penetration with flexibility show" },
+{ category: "Kinky", text: "The Dolphin - You lie on stomach, they enter from behind, then lift your hips up so only your shoulders touch bed, suspended ass-up fucking" },
+{ category: "Kinky", text: "The Corkscrew Position - You on back, them entering missionary but with your legs wrapped around their waist and twisting your hips side to side as they thrust" },
+{ category: "Kinky", text: "The G-Force Position - You lie on back at edge of bed, them standing, grab your hips and pull you onto their cock while thrusting, hard slamming action" },
+{ category: "Kinky", text: "The Octopus Position - You on back, legs up and spread wide like an octopus, them kneeling and penetrating while holding your ankles up by their shoulders" },
+{ category: "Kinky", text: "The Flatiron Position - You lie face down flat on bed, legs straight and together, them lying on top entering from behind, completely pinned and dominated" },
+{ category: "Kinky", text: "The Thighmaster - You squeeze your thighs together tight while they penetrate, extra friction and tightness, they have to force their way in" },
+{ category: "Kinky", text: "The Lazy Dog - You lie flat on stomach, legs together, they lie on top entering from behind, full body weight pressing you into mattress" },
+{ category: "Kinky", text: "The Pretzel Dip - You lie on side, one leg bent and wrapped around them, other leg over their shoulder, twisted position for tight sensation" },
+{ category: "Kinky", text: "The Sofa Brace - You bend over sofa arm, one knee on cushion, other foot on floor, them entering from behind at perfect height for hard fucking" },
+{ category: "Kinky", text: "The Good Exerciser - You lie on back, put ankles behind your own head, them kneeling over you and penetrating downward, extreme depth and submission" },
+{ category: "Kinky", text: "The Cross Position - You lie on back, they lie perpendicular on top forming a cross, entering from side angle, completely different sensation" },
+{ category: "Kinky", text: "The Ben Dover Position - You bend over at waist, grab your own ankles, them taking you from behind while you're folded in half, maximum depth penetration" },
+{ category: "Kinky", text: "The Chairman Position - They sit in chair, you straddle facing away, then lean all the way back until your head is upside down between their legs, blood rush plus fucking" },
+{ category: "Kinky", text: "The Arch Position - You bridge up into an arch position, them penetrating from above while you hold the pose, intense core workout plus fucking" },
+{ category: "Kinky", text: "The Wheelbarrow - They hold your legs like a wheelbarrow, walking you around the room while fucking you, completely at their mercy for movement" },
+{ category: "Kinky", text: "The Galloping Horse - You on all fours, them behind but leaning over your back, grabbing your tits/chest while pounding, like riding a horse" },
+{ category: "Kinky", text: "The Suspended Congress - They sit in sturdy chair, you sit on them facing away, then they stand up while still inside you, fucking while carrying you" },
+{ category: "Kinky", text: "Seated 69 - One sits on edge of chair, other lies on back with head between their legs, both pleasuring while one dominates from above" },
+{ category: "Kinky", text: "Standing 69 - One partner holds the other upside down against a wall, eating each other out, gravity making everything more intense" },
+{ category: "Kinky", text: "Tongue Tip Torment - Use only the very tip of your tongue to trace patterns around their genitals for 60 seconds without direct contact, driving them insane" },
+{ category: "Kinky", text: "Texture Guessing Genitals - Press different textures against their blindfolded cock/pussy, making them guess each material as their sensitive parts twitch" },
+{ category: "Kinky", text: "Breath Play Oral - Cover their mouth while sucking them off, controlling their breath until they're desperate for air and release" },
+{ category: "Kinky", text: "Cock Tease Friction - Rub your dripping pussy up and down their shaft, denying penetration for 60 seconds as they beg to be inside you" },
+{ category: "Kinky", text: "Lingerie Pillow Humping - She wears expensive lingerie and humps a pillow in front of you, showing you how wet she's getting before you're allowed to touch" },
+{ category: "Kinky", text: "Flogger Warm-up - Start with light flogger strikes across the ass, gradually increasing intensity until their skin is pink and sensitive to touch" },
+{ category: "Kinky", text: "69 With Throat-Fucking - You're on top, they grab your hips and force you down onto their cock, throat-fucking you while eating you out, both choking and gagging" },
+
+
+            // Kinkier
+{ category: "Kinkier", text: "Mutual Masturbation Porn - You choose the porn scene, both of you naked and touching yourselves, matching the rhythm on screen until you both cum" },
+{ category: "Kinkier", text: "Doggy While Watching Porn - They select the porn, you're on all fours facing the screen, them pounding you from behind as you both watch the action" },
+{ category: "Kinkier", text: "69 With Mirror - Lying sideways in front of mirror, 69ing while watching" },
+{ category: "Kinkier", text: "Underwear Gag - You stuff your own underwear or theirs into their mouth while fucking, every thrust making them taste while  unable to scream" },
+{ category: "Kinkier", text: "Oral Service Portrait - You position the camera to capture the perfect shot of them between your thighs, their mouth working your pussy/cock" },
+{ category: "Kinkier", text: "Piledriver - One partner upside down on shoulders, other stands over them, will full access to eat and penetrate" },
+{ category: "Kinkier", text: "Bondage + Edge Play - Tied spread-eagle, brought to edge of orgasm 3 times in 60 seconds, denied each time, begging and shaking" },
+{ category: "Kinkier", text: "Bondage + Forced Orgasm - Wrists tied to bedposts, Hitachi/dildo held against you, not allowed to move away, overstimulated until you're begging" },
+{ category: "Kinkier", text: "Wrist Cuff Surrender - Leather cuffs on your wrists, completely vulnerable as they use your body however they want" },
+{ category: "Kinkier", text: "Massage Bondage - You're face down on bed, limbs restrained, they massage you then flip you over to use you while still tied down" },
+{ category: "Kinkier", text: "Spanking To Orgasm - Bent over their knee, spanked hard while they finger you, not allowed to cum until you've taken 20 strikes, ass burning" },
+{ category: "Kinkier", text: "Spanking With Implements - Paddle or crop, 15 hard strikes, counting each one out loud, ass bright red and hot" },
+{ category: "Kinkier", text: "Spanking While Plugged - Butt plug in, bent over, spanked hard, the plug moving with each strike, stuffed and punished simultaneously" },
+{ category: "Kinkier", text: "Dom Orgasm Control - They masturbate you but refuse to let you cum, making you beg and plead before they finally allow release" },
+{ category: "Kinkier", text: "Vibrating Toy Control - You control the settings of a vibrating anal/pussy toy on them while they squirm and beg for more or less intensity" },
+{ category: "Kinkier", text: "Face-Sitting - You grind on their face with your crotch, tapping your thigh when you need a break, you keep going until last second" },
+{ category: "Kinkier", text: "Ass-Eating While Masterbating - They bury their face in your ass, tongue deep, while masturbating, coming up to kiss you with your taste on their lips" },
+{ category: "Kinkier", text: "Ass-Worship + Rimming - You're on all fours, they spread you wide, bury their face in your ass, tongue-fucking your hole while pleasuring your front" },
+{ category: "Kinkier", text: "Ass-Eating With Front Play - You're on your stomach, they spread your cheeks, tongue deep in your ass while fingering or jerking your front" },
+{ category: "Kinkier", text: "Rimming 69 - Both on sides, faces buried in each other's asses, tongues probing deep while hands reach around to stroke/finger each other, tasting each other's most intimate flavor" },
+{ category: "Kinkier", text: "Pinching Nipples + Rough Sex - Pinching their nipples while having rough sex, pulling with every thrust, the pain mixing with pleasure" },
+{ category: "Kinkier", text: "Mirror Position With Dirty Talk - Fucking while watching yourselves, describing exactly what they're doing to you in graphic detail" },
+{ category: "Kinkier", text: "Outdoor Oral Sex - You give them oral sex in a semi-public outdoor location, the risk of being caught adding to the excitement" },
+{ category: "Kinkier", text: "Sideways 69 With Anal Play - Both on your sides facing each other's genitals, 69ing while simultaneously fingering each other's asses" },
+{ category: "Kinkier", text: "The Amazon Position - You're on top but facing their feet, in control but from reverse angle, squatting and riding with full power" },
+{ category: "Kinkier", text: "Dom Worship Session - You kneel and worship every part of their body they direct you to, spending 60 seconds on each area before moving to next" },
+{ category: "Kinkier", text: "Mirror Dildo DP - Partner fucks you with a dildo in your ass while they penetrate your pussy, positioned so you watch every inch disappear in the mirror" },
+{ category: "Kinkier", text: "Choked From Behind - Hand around your throat (sides only), pulling your head back to their shoulder while they pound you standing up, watching in the mirror" },
+{ category: "Kinkier", text: "Choke-Fucked - Pinned in place, legs wrapped around them, hand on throat, hard, fast, brutal pounding" },
+{ category: "Kinkier", text: "Rough Doggystyle With Hair Pull - You're face-down, they're pounding you, yanking your head back by the hair, spitting on your back, using you like a toy" },
+{ category: "Kinkier", text: "Breath Play Choking - Their hand on your throat during penetration, cutting off air, letting go right before you tap out" },
+{ category: "Kinkier", text: "Bondage + Free Use - You're tied up, they use any hole they want for 60 seconds, switching between mouth and pussy/ass at will, you're just a hole for them" },
+{ category: "Kinkier", text: "CNC Roleplay Element - 'Struggle' while they hold you down, force your legs open, take you while you 'resist' (pre-negotiated, safeword ready)" },
+{ category: "Kinkier", text: "CNC Break-In Fantasy - They break in restraining your hands, then forcing themselves on you while you struggle (pre-negotiated)" },
+{ category: "Kinkier", text: "Wrestling Pin Down - Starting on your knees, you wrestle for dominance, the winner takes the loser in whatever way they want" },
+{ category: "Kinkier", text: "Outside Risk - They bend you over outside, hand over your mouth to muffle sounds as they pound you" },
+{ category: "Kinkier", text: "Ass-to-Pussy Switching - They fuck your ass, pull out, immediately go into your pussy, back and forth, dirty and raw" },
+{ category: "Kinkier", text: "Anal + Clit Stimulation - Dildo or cock in your ass, vibrator on your clit/cock, dual sensation overload, not allowed to cum until they say" },
+{ category: "Kinkier", text: "Anal + Mirror View - You're on your back, legs up, them entering your ass slowly while you watch in a mirror, seeing yourself get stretched" },
+{ category: "Kinkier", text: "Anal Beads Rip-Out - Beads fully inserted, they pull them out one by one on the count of three while you're being pleasured" },
+{ category: "Kinkier", text: "Anal Training Session - Starting with finger, graduating to plug, then dildo, then their cock/strap on if you can take it, 60 seconds at each stage" },
+{ category: "Kinkier", text: "Anal Fingering During 69 - Standard 69 position but both reaching down to finger each other's asses while sucking, dual stimulation overload" },
+{ category: "Kinkier", text: "Anal Fingering While Fucking - Doggy style but they reach around to finger your ass while pounding your pussy/cock, stuffed full sensation" },
+{ category: "Kinkier", text: "Anal Fingering During Oral - You're giving them oral, they reach down and finger your ass, controlling your movement with their hand in your hole" },
+{ category: "Kinkier", text: "Mutual Anal Fingering Standing - Standing facing each other, kissing deeply while both reaching around to finger each other's asses at same time" },
+{ category: "Kinkier", text: "Double Penetration With Two Toys - One toy in ass, one in pussy, they're controlling both, stretching you open while watching your face" },
+{ category: "Kinkier", text: "Dildo Double Vaginal - Two dildos (or one dildo + their cock) in your pussy at once, stretching you wide, the intense fullness" },
+{ category: "Kinkier", text: "Dildo + Rough Handling - Dildo inserted, they use the base to control your hips while fucking you, using it as a handle" },
+{ category: "Kinkier", text: "Dildo Sucking Practice - They hold a realistic dildo, you show off your deepthroat skills, taking it balls-deep, holding it, eyes watering, while they stroke themselves watching" },
+{ category: "Kinkier", text: "Throat-Pie Position - You lying flat on bed, head hanging off, them standing over you, fucking your throat like a pussy, using your throat to get off" },
+{ category: "Kinkier", text: "Throat-Fucking To Completion - They use your throat exclusively to get off, no hands on themselves, just your throat muscles, cumming deep in your throat" },
+{ category: "Kinkier", text: "Throat-Fucking With Choking - Choking while fucking your throat, controlling your air and position" },
+{ category: "Kinkier", text: "The Standing Throat-Fuck - They stand, you kneel, they grab your head with both hands and use your throat aggressively while you look up at them" },
+{ category: "Kinkier", text: "The Throat Bulge Visible - You lie on back, head hanging off, them fucking your throat slowly so they can see the bulge of their cock in your neck" },
+{ category: "Kinkier", text: "The Gag Reflex Training - They hold dildo at back of your throat, you practice suppressing gag reflex, holding longer each time, tears and drool everywhere" },
+{ category: "Kinkier", text: "Forced Deepthroat - Dildo or cock shoved deep, they hold it there, count to 5, release, repeat until you're a drooling mess" },
+{ category: "Kinkier", text: "69 Rimming Each Other - Both of you on your sides, mouths buried in each other's asses, tongues probing deep while you jerk/finger each other" },
+{ category: "Kinkier", text: "Tongue-Fucking Ass - They spread your cheeks wide and literally fuck your ass with their tongue, thrusting in and out like a cock, tongue deep inside you, making you feel every movement as they claim your most private hole" },
+{ category: "Kinkier", text: "Tongue-Fucking + Ass Play - They tongue-fuck your ass while reaching around to stroke your cock/finger your pussy, the dual stimulation overwhelming as their tongue claims your back door" },
+{ category: "Kinkier", text: "Ass Worship Facesitting - You lower your ass onto their face, grinding and bouncing as they're forced to worship with their tongue, completely smothered" },
+{ category: "Kinkier", text: "Face Grinding - You straddle their face, rubbing your pussy/cock all over them, using their nose and chin for your pleasure, making them taste you completely" },
+{ category: "Kinkier", text: "Double Spit Kiss - You both spit into each other's mouths repeatedly, then kiss deeply, the mixture of your fluids passing between you as your tongues intertwine" },
+{ category: "Kinkier", text: "Spit Exchange - Standing face to face, you take turns spitting directly into each other's mouths, catching it on your tongues before swallowing, the intimate exchange of fluids" },
+{ category: "Kinkier", text: "Spit Lubrication - Spit on their ass/pussy or cock repeatedly instead of using lube, then oral or penetration" },
+{ category: "Kinkier", text: "Facesitting with Teasing - You're on their face, allowing occasional tongue contact but mostly denying, making them desperate for your taste" },
+{ category: "Kinkier", text: "Pillow Smothering Doggystyle - You're on your stomach, them on top with a pillow pressed to your face, restricting your breath as they pound you from behind" },
+{ category: "Kinkier", text: "Pillow Smothering Cowgirl - You're riding them, pressing a pillow to their face, controlling their breath as you grind down on their cock" },
+{ category: "Kinkier", text: "Bondage + Sensory Deprivation - Blindfolded, earplugs in, tied up, completely at their mercy, they can do anything for 60 seconds, you have no warning" },
+{ category: "Kinkier", text: "First-Person Pussy Photo - They hold the phone looking down, capturing the moment their cock/dildo spreads you open and slides inside, your wetness coating their shaft" },
+{ category: "Kinkier", text: "First-Person Ass Penetration - Camera angled down, they photograph their dick/dildo pressing against and then entering your tight ass, the initial stretch and full insertion" },
+{ category: "Kinkier", text: "Mirror Humiliation Position - You're on your knees, face directly in front of mirror, them fucking you from behind, making you watch your own face as they use you" },
+{ category: "Kinkier", text: "Foot Altar - You arrange their feet on a pillow, and spend 60 seconds kissing, licking, and worshiping each toe like it's sacred" },
+{ category: "Kinkier", text: "The Toe-Tied Footjob - Your ankles tied together with their cock between your feet, they fuck your bound feet while you wiggle your toes on their shaft" },
+{ category: "Kinkier", text: "The Reverse Footjob - You're on stomach, they straddle your legs backwards and fuck the soles of your feet while looking at your ass, cumming on your heels" },
+{ category: "Kinkier", text: "Tongue Sucking Battle - You both stick out your tongues, taking turns sucking each other's tongues like cocks, pulling them deep into your mouths, fighting for dominance in this oral dance" },
+{ category: "Kinkier", text: "Mouth Exploration Mapping - They spend 60 seconds exploring every inch of your mouth with their tongue - roof, under tongue, cheeks, gums, behind teeth, mapping your oral cavity completely before pulling away to describe what they discovered" },
+{ category: "Kinkier", text: "Wax Art Canvas - Drip hot wax patterns on their ass and back, watching them squirm as each drop burns their skin into your artwork" },
+{ category: "Kinkier", text: "Vibrating Ass Pound - That buzzing toy massaging the inside of your ass while they fuck you will make you explode harder than ever before" },
+{ category: "Kinkier", text: "Rimming Relay Race - Take turns rimming each other's asses for 60 seconds each, at least two rounds, tongues deep in each other's holes" },
+{ category: "Kinkier", text: "Rimming 69 With Toys - Both on sides, faces buried in each other's asses, tongues probing deep while simultaneously fucking each other with toys" },
+{ category: "Kinkier", text: "P-Spot Overload - Use a prostate massager while materbating, your partner watches and controls the vibration " },
+{ category: "Kinkier", text: "Prostate Milking - They massage your prostate through your ass with their fingers or a toy, forcing you to cum without touching your cock" },
+{ category: "Kinkier", text: "Face Down Fuckdoll - Your ankles tied to your wrists, face down and helpless while they use every hole before taking you from behind" },
+{ category: "Kinkier", text: "Ankle to Wrist Hogtie - Your ankles bound to your wrists, leaving you completely exposed for them to use however they please" },
+{ category: "Kinkier", text: "Spread Eagle Sacrifice - Arms and legs stretched and restrained, face up and vulnerable as they have their way with your helpless body" },
+{ category: "Kinkier", text: "Face Down Spread Eagle - Arms and legs stretched wide with you on your stomach, completely exposed for them to take from behind" },
+{ category: "Kinkier", text: "Fleshlight Milking - Restrain their arms and force a fleshlight onto their cock, pumping them until they explode with helpless pleasure" },
+{ category: "Kinkier", text: "Oral Tease Torture - Bring them to the edge with your mouth then stop completely for 10 seconds, repeating until they're begging to cum" },
+{ category: "Kinkier", text: "Nipple Suction Show - Take turns sucking each other's nipples for 60 seconds each, reapeat until they're swollen and sensitive, seeing who can create the most suction" },
+{ category: "Kinkier", text: "Gagged and Used - Muffle your moans and whimpers with a ball gag while they use your body, turning you into their helpless little fucktoy" },
+{ category: "Kinkier", text: "Face Smother Ride - Straddle their cock and smother their face with your feet while you ride them, controlling their breath" },
+{ category: "Kinkier", text: "Collar and Leash Walk - Put a collar on them and lead them around the room like your personal pet, making them crawl and obey" },
+{ category: "Kinkier", text: "Ass Massage to Finger Fuck - Gently massage their perineum and anus for 60 seconds, then penetrate with lubed fingers for another 60 seconds" },
+{ category: "Kinkier", text: "Flogger Nipple Target Practice - Use the flogger tips to strike their nipples directly, watching them harden with each sharp impact" },
+{ category: "Kinkier", text: "Flogger Between the Legs - Light flogger strikes against their inner thighs and genitals, the leather tongues teasing sensitive areas with each snap" },
+{ category: "Kinkier", text: "Soaked Lingerie Sniffing - She masturbates in her panties until they're soaked, then stuffs them in your mouth while you fuck her" },
+{ category: "Kinkier", text: "Stocking Foot Job - She wraps her stocking-clad feet around his cock, stroking him with the silky fabric until he's begging to feel her pussy instead" },
+{ category: "Kinkier", text: "The Throat Massage - They gently massage your throat from outside while cock is deep inside, feeling themselves through your neck, then pound hard" },
+
+
+            // Filthy
+{ category: "Filthy", text: "Mirror Anal Fingering - Facing mirror, they finger your ass from behind while you watch your own face react, seeing your hole being worked" },
+{ category: "Filthy", text: "Self-Fingering Show - You finger your own ass while they watch, then make them taste your fingers, teaching them how you like it" },
+{ category: "Filthy", text: "Dick Slap Face Fuck - They alternate betweem slapping your face with their dick and shoving it in your mouth" },
+{ category: "Filthy", text: "Spitroast Simulation - You hold a dildo in your mouth, throat-fucking yourself while they rail you from behind, spit dripping down your chin onto your tits" },
+{ category: "Filthy", text: "Toe-Sucking Facefuck - You're on your back, head hanging off the bed, they fuck your throat while sucking your toes, you gagging and drooling upside-down" },
+{ category: "Filthy", text: "Ass-to-Mouth Toy Play - They fuck your ass with a dildo, pull it out, and make you suck your own taste off it while they watch" },
+{ category: "Filthy", text: "Spit-Filled Double Blowjob - They hold two dildos together, you drool all over both and try to take both heads in your mouth, spit everywhere" },
+{ category: "Filthy", text: "Pissing - They piss on your chest and stomach, then rub it into your skin" },
+{ category: "Filthy", text: "Pissing While Fucking - Both of you pissing while having sex, hot and wet" },
+{ category: "Filthy", text: "Piss drinking - They piss in your mouth, you hold it, swish it, swallow (if into) while looking up at them, total submission" },
+{ category: "Filthy", text: "Golden Shower Facial - They stand above you, pissing on your face and in your mouth while you look up at them, swallowing and letting it run down your chin" },
+{ category: "Filthy", text: "Piss On Face/Body - They piss on your face, chest, stomach, marking you as theirs" },
+{ category: "Filthy", text: "Spit-Facial - They spit in your open mouth and on your face repeatedly while stroking themselves, degrading talk, making you beg for their cum" },
+{ category: "Filthy", text: "Porn-Star Position - Piledriver position - you on shoulders, neck/head on floor, them standing over you fucking down into you, complete submission angle" },
+{ category: "Filthy", text: "Foot Gagging - They shove their foot in your mouth, make you suck their toes while they jerk off, then cum on your face while you're still sucking/gagging on their foot" },
+{ category: "Filthy", text: "Ass-to-Mouth - They fuck your ass, pull out, shove their cock or dildo in your mouth, making you taste yourself" },
+{ category: "Filthy", text: "Forced Orgasm Torture - Vibrator taped/held on you, not allowed to move, cumming over and over until you're oversensitive and begging them to stop" },
+{ category: "Filthy", text: "Spit + Slap + Choke Combo - Spit in your face, slap your cheek, choke your throat, establishing total dominance in 60 seconds of intensity" },
+{ category: "Filthy", text: "Face-Slapping + Choking Combo - Light face slaps (cheeks only) while choking, establishing dominance, then hard, claiming fuck" },
+{ category: "Filthy", text: "Doggy Style Head Control - They fuck you doggy style while pressing your head down with their foot, controlling your movement and position" },
+{ category: "Filthy", text: "Choke-Fuck With Slapping - One hand on throat, other hand slapping your tits/ass while they pound you, complete sensory overwhelm, no escape" },
+{ category: "Filthy", text: "Anal Double Dildo - Both stick opposite ends of a double dildo and ride it against each other" },
+{ category: "Filthy", text: "Simultaneous Anal Masturbation - Sitting across from each other, legs spread, watching each other finger your own asses" },
+{ category: "Filthy", text: "Golden Shower Worship - They piss on your tits/stomach, then you kneel and lick their cock/pussy clean, tasting the last drops" },
+{ category: "Filthy", text: "Pissing On Back And Ass - They piss on your back and ass, marking you" },
+{ category: "Filthy", text: "Piss Play Power Dynamic - You piss aiming for their head and body then they piss on your pussy/cock while you're hard/wet" },
+{ category: "Filthy", text: "Mutual Pissing - You take turns pissing on each other's bodies and faces, marking each other" },
+{ category: "Filthy", text: "Pegging From Behind - You wearing a strap-on, them on all fours, you entering them slowly, then pounding harder as you grip their hips, watching your cock disappear in their ass" },
+{ category: "Filthy", text: "Pegging Missionary - You on top between their legs, watching their face as you enter them, controlling the pace and depth while you jerk them off" },
+{ category: "Filthy", text: "Cum Swapping - They cum in your mouth, then kiss you deeply, making you pass the cum back and forth between you before finally swallowing" },
+{ category: "Filthy", text: "Cum Play Finale - They cum on your face/tits/ass, you rub it in, scoop it up, eat it while maintaining eye contact, showing you're their eager cumslut" },
+{ category: "Filthy", text: "Vaginal Fuck POV Video - They hold the phone steady, recording their cock/dildo pistoning in and out of your pussy, capturing the sounds of wet fucking and your moans" },
+{ category: "Filthy", text: "Anal Fuck POV Video - Camera pointed down, you document their cock/dildo stretching and fucking your ass" },
+{ category: "Filthy", text: "Facial Photo - They take photos of your cum-covered face after they've given you a facial, making you pose with their taste still on your lips" },
+{ category: "Filthy", text: "Footjob With Cum Target - You use your feet on their cock, they aim to cum on your feet/toes, then make you clean it up with your mouth" },
+{ category: "Filthy", text: "The Footjob Finish - You use both feet on their cock, alternating pressure between soles and toes, making them cum all over your feet then lick it clean" },
+{ category: "Filthy", text: "Foot Domination - You're on your back, they stand over you, rubbing their feet on your face, making you lick/suck while they masturbate above you" },
+{ category: "Filthy", text: "Ball Sucking Face Rub - You suck and lick their balls while they rub their hard dick all over your face, they cum on your face then rub it in with their dick" },
+{ category: "Filthy", text: "Foot Cum Rimming - They cum all over your feet while you're rimming their ass, then you lick the cum off your own toes" },
+{ category: "Filthy", text: "Oral Performance Capture - Phone in hand, you film them going down on you, capturing every tongue and lip movement on your pussy/cock" },
+{ category: "Filthy", text: "Self-Filming Oral - You film yourself giving them oral from different angles, then watch it together while they return the favor" },
+{ category: "Filthy", text: "Fully Stuffed - You gag on a dildo while your pussy/ass is being penetrated with their dick and your other whole stuffed with a dildo, filling all of your holes" },
+{ category: "Filthy", text: "Mirror Self-Filming - Phone propped up filming you getting railed from behind, pausing to watch the footage together, then continuing harder" },
+{ category: "Filthy", text: "Mirror Humiliation - You're on your knees, they're fucking your face, making you watch yourself gag and drool, calling you their 'dirty little slut' while you watch" },
+{ category: "Filthy", text: "Mirror Self-Degradation - You're on all fours, they're behind you, making you say degrading things about yourself while watching your own face in the mirror" },
+{ category: "Filthy", text: "Rough Anal With Choking - You're on your stomach, them on top, cock/dildo deep in your ass, hand on your throat, whispering filth in your ear while they ruin you" },
+{ category: "Filthy", text: "Rough Anal Pounding - You face-down, ass up, pillow under hips, them driving deep and hard, pulling your hair back to arch your spine" },
+{ category: "Filthy", text: "Fleshlight Pegging - You pound their ass with a strap-on while they're forced to fuck a fleshlight, filled from both ends" },
+{ category: "Filthy", text: "Rim and Fleshlight - You tongue-fuck their asshole deep while they stroke into a fleshlight, overwhelming their senses from both sides" },
+{ category: "Filthy", text: "Cum Swapping Snowball - They fill your mouth with hot cum and you baby bird it into theirs, they spit it back into yours for you to swallow" },
+{ category: "Filthy", text: "Rough Doggystyle With Degradation - Pounding you from behind, pulling your hair back to make you scream, calling you their 'fucktoy/cumdump/whore,' claiming ownership" },
+{ category: "Filthy", text: "Choke-Fuck With Slapping - One hand on throat, other hand slapping your tits/ass while they pound you, complete sensory overwhelm, no escape" },
+{ category: "Filthy", text: "Sub Task Assignment - They assign you three humiliating tasks to complete while they watch, only allowing pleasure after all are completed perfectly" },
+{ category: "Filthy", text: "Face Riding + Spit - You're sitting on their face, grinding down while spitting into their mouth, their tongue working you as you spit onto them" },
+{ category: "Filthy", text: "BDSM Porn Watching  - You watch BDSM porn together while mimicking the acts on screen, taking turns being dominant" },
+{ category: "Filthy", text: "Dildo Gag Deepthroat - You're wearing a dildo gag, they fuck your face with it, using your head as a fleshlight, tears streaming" },
+{ category: "Filthy", text: "Toe Penetration Tease - Use your big toe to penetrate their ass/pussy, fucking them slowly with your foot while they squirm" },
+{ category: "Filthy", text: "Strap-On Virginity - They take your anal virginity with a strap-on, starting gentle and building to a rough pounding as you open up" },
+{ category: "Filthy", text: "Finger Stretch Challenge - Start with one lubed finger and gradually add more until they're stuffed full and begging you to stop" },
+{ category: "Filthy", text: "Dual P-Spot Pleasre  - They work your cock with their mouth and pussy while you have a curved prostate massager pressed against your prostate until you cum" },
+{ category: "Filthy", text: "Ass Grinding Facesitting - You're on their face, grinding your ass cheeks against them, using their nose for stimulation without allowing direct tongue contact" },
+
+        ];
+
+        let selectedCategory = "Kinky";
+        let selectedDuration = 120;
+        let remaining = selectedDuration;
+        let timerInterval = null;
+        let spinning = false;
+
+        /* WEB AUDIO ALARM SYNTHESIZER */
+        let audioCtx = null;
+        let alarmInterval = null;
+
+        function playAlarmBeep() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const now = audioCtx.currentTime;
+                [0, 0.18].forEach(offset => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, now + offset);
+
+                    gain.gain.setValueAtTime(0.35, now + offset);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.12);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start(now + offset);
+                    osc.stop(now + offset + 0.12);
+                });
+            } catch (e) {
+                console.log('Audio playback prevented or unsupported');
+            }
+        }
+
+        function startAlarm() {
+            stopAlarm();
+            playAlarmBeep();
+            alarmInterval = setInterval(playAlarmBeep, 800);
+
+            timer.classList.add("alarm-active");
+            modalTimer.classList.add("alarm-active");
+
+            openTimerPopout();
+        }
+
+        function stopAlarm() {
+            if (alarmInterval) {
+                clearInterval(alarmInterval);
+                alarmInterval = null;
+            }
+            timer.classList.remove("alarm-active");
+            modalTimer.classList.remove("alarm-active");
+        }
+
+        const timer = document.getElementById("timer");
+        const modalTimer = document.getElementById("modalTimer");
+
+        const titleSlot = document.getElementById("titleSlot");
+        const descriptionSlot = document.getElementById("descriptionSlot");
+        const titleText = document.getElementById("titleText");
+        const descriptionText = document.getElementById("descriptionText");
+        
+        const modalTitleSlot = document.getElementById("modalTitleSlot");
+        const modalDescriptionSlot = document.getElementById("modalDescriptionSlot");
+        const modalTitleText = document.getElementById("modalTitleText");
+        const modalDescriptionText = document.getElementById("modalDescriptionText");
+        const categoryBadge = document.getElementById("categoryBadge");
+        const modalCategoryBadge = document.getElementById("modalCategoryBadge");
+        const timerProgressBar = document.getElementById("timerProgressBar");
+        const modalTimerProgressBar = document.getElementById("modalTimerProgressBar");
+
+        const randomBtn = document.getElementById("randomBtn");
+        
+        const activityModalBackdrop = document.getElementById("activityModalBackdrop");
+        const closeActivityBtn = document.getElementById("closeActivityBtn");
+
+        const timerModalBackdrop = document.getElementById("timerModalBackdrop");
+        const closeTimerBtn = document.getElementById("closeTimerBtn");
+
+        /* CATEGORY SELECTION HANDLER */
+        function getFilteredActivities() {
+            if (selectedCategory === "Roulette") return categorizedActivities;
+            return categorizedActivities.filter(item => item.category === selectedCategory);
+        }
+
+        function clearActivity() {
+            titleText.textContent = "";
+            descriptionText.textContent = "";
+            modalTitleText.textContent = "";
+            modalDescriptionText.textContent = "";
+        }
+
+        function updateCategoryBadges() {
+            const label = selectedCategory === "Roulette" ? "Roulette" : selectedCategory;
+            categoryBadge.textContent = label;
+            modalCategoryBadge.textContent = label;
+        }
+
+        document.querySelectorAll(".cat-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (spinning) return;
+                document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                selectedCategory = btn.dataset.category;
+                updateCategoryBadges();
+                
+                // Clear slots when switching category
+                clearActivity();
+            });
+        });
+
+        /* TIMER FUNCTIONS */
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes}:${String(secs).padStart(2, "0")}`;
+        }
+
+        function updateTimer() {
+            const formatted = formatTime(remaining);
+            timer.textContent = formatted;
+            modalTimer.textContent = formatted;
+            const progress = selectedDuration > 0 ? remaining / selectedDuration : 0;
+            timerProgressBar.style.transform = `scaleX(${Math.max(0, progress)})`;
+            modalTimerProgressBar.style.transform = `scaleX(${Math.max(0, progress)})`;
+        }
+
+        function resetTimer() {
+            stopAlarm();
+            clearInterval(timerInterval);
+            timerInterval = null;
+            remaining = selectedDuration;
+            updateTimer();
+            document.querySelectorAll(".start-timer-btn").forEach(btn => btn.textContent = "Start Timer");
+        }
+
+        function startTimer() {
+            stopAlarm();
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                remaining--;
+                updateTimer();
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    document.querySelectorAll(".start-timer-btn").forEach(btn => btn.textContent = "Start Timer");
+                    startAlarm();
+                }
+            }, 1000);
+            document.querySelectorAll(".start-timer-btn").forEach(btn => btn.textContent = "Pause Timer");
+        }
+
+        document.querySelectorAll(".start-timer-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                openTimerPopout();
+                
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    document.querySelectorAll(".start-timer-btn").forEach(b => b.textContent = "Start Timer");
+                } else {
+                    startTimer();
+                }
+            });
+        });
+
+        document.querySelectorAll(".reset-timer-btn").forEach(btn => {
+            btn.addEventListener("click", resetTimer);
+        });
+
+        /* TIMER DURATION OPTIONS */
+        document.querySelectorAll(".timer-opt-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const targetTime = Number(btn.dataset.time);
+                document.querySelectorAll(".timer-opt-btn").forEach(b => {
+                    if (Number(b.dataset.time) === targetTime) {
+                        b.classList.add("active");
+                    } else {
+                        b.classList.remove("active");
+                    }
+                });
+                selectedDuration = targetTime;
+                resetTimer();
+            });
+        });
+
+        /* SET ACTIVITY TEXT ON BOTH MAIN AND MODAL */
+        function setActivity(activity) {
+            if (!activity) {
+                clearActivity();
+                return;
+            }
+            const parts = activity.split(" - ");
+            const t = parts[0] || activity;
+            const d = parts.slice(1).join(" - ") || "";
+
+            titleText.textContent = t;
+            descriptionText.textContent = d;
+            
+            modalTitleText.textContent = t;
+            modalDescriptionText.textContent = d;
+        }
+
+        /* MODAL POP-OUT CONTROLS */
+        function openActivityPopout() {
+            activityModalBackdrop.classList.add("active");
+        }
+
+        function closeActivityPopout() {
+            activityModalBackdrop.classList.remove("active");
+        }
+
+        function openTimerPopout() {
+            timerModalBackdrop.classList.add("active");
+        }
+
+        function closeTimerPopout() {
+            stopAlarm();
+            timerModalBackdrop.classList.remove("active");
+        }
+
+        closeActivityBtn.addEventListener("click", closeActivityPopout);
+        closeTimerBtn.addEventListener("click", closeTimerPopout);
+        
+        activityModalBackdrop.addEventListener("click", (e) => {
+            if (e.target === activityModalBackdrop) closeActivityPopout();
+        });
+
+        timerModalBackdrop.addEventListener("click", (e) => {
+            if (e.target === timerModalBackdrop) closeTimerPopout();
+        });
+
+        /* RANDOM ACTIVITY SLOT ANIMATION (CATEGORY FILTERED) */
+        randomBtn.addEventListener("click", () => {
+            if (spinning) return;
+
+            const pool = getFilteredActivities();
+            if (pool.length === 0) return;
+
+            spinning = true;
+            randomBtn.disabled = true;
+
+            // Open Activity Pop-out Spotlight
+            openActivityPopout();
+
+            const chosen = pool[Math.floor(Math.random() * pool.length)];
+            const finalActivity = chosen.text;
+
+            // Apply spin to both main and modal slots
+            titleSlot.classList.add("spinning");
+            descriptionSlot.classList.add("spinning");
+            modalTitleSlot.classList.add("spinning");
+            modalDescriptionSlot.classList.add("spinning");
+
+            let i = 0;
+            const reelInterval = setInterval(() => {
+                const activity = pool[i++ % pool.length].text;
+                setActivity(activity);
+            }, 65);
+
+            // Stage 1: Stop reel interval, slow down title
+            setTimeout(() => {
+                clearInterval(reelInterval);
+                setActivity(finalActivity);
+                
+                titleSlot.classList.remove("spinning");
+                titleSlot.classList.add("title-slowing");
+                descriptionSlot.classList.remove("spinning");
+                descriptionSlot.classList.add("description-still-spinning");
+
+                modalTitleSlot.classList.remove("spinning");
+                modalTitleSlot.classList.add("title-slowing");
+                modalDescriptionSlot.classList.remove("spinning");
+                modalDescriptionSlot.classList.add("description-still-spinning");
+            }, 3500);
+
+            // Stage 2: Title stopped, slow down description
+            setTimeout(() => {
+                titleSlot.classList.remove("title-slowing");
+                descriptionSlot.classList.remove("description-still-spinning");
+                descriptionSlot.classList.add("description-slowing");
+
+                modalTitleSlot.classList.remove("title-slowing");
+                modalDescriptionSlot.classList.remove("description-still-spinning");
+                modalDescriptionSlot.classList.add("description-slowing");
+            }, 5300);
+
+            // Stage 3: All animations complete
+            setTimeout(() => {
+                descriptionSlot.classList.remove("description-slowing");
+                modalDescriptionSlot.classList.remove("description-slowing");
+                spinning = false;
+                randomBtn.disabled = false;
+            }, 7100);
+        });
+
+        // Initialize display with empty activity slots and default timer
+        clearActivity();
+        updateCategoryBadges();
+        updateTimer();
+    </script>
+</body>
+</html>
+
