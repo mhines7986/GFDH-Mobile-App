@@ -20,6 +20,8 @@
             <p id="installHelp">Add the game to your device for quick access.</p>
             <button class="main install-app-button" id="installApp" type="button">Install App</button>
             <a class="browser-version-link" id="browserVersionLink" href="./index.html" target="_blank" rel="noopener">Open in Chrome browser</a>
+            <p class="browser-url-help">If Chrome's menu is not visible, open the Chrome app from your app drawer and paste this URL:</p>
+            <button class="browser-url" id="copyBrowserUrl" type="button">https://mhines7986.github.io/GFDH-Mobile-App/</button>
         </section>
         <section class="settings-list" aria-label="Game settings">
             <label class="setting-row" for="defaultDuration">
@@ -56,11 +58,13 @@
         const installApp = document.getElementById("installApp");
         const installHelp = document.getElementById("installHelp");
         const browserVersionLink = document.getElementById("browserVersionLink");
+        const copyBrowserUrl = document.getElementById("copyBrowserUrl");
+        const browserUrl = "https://mhines7986.github.io/GFDH-Mobile-App/";
         let deferredInstallPrompt = null;
 
         const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
         if (/Android/i.test(navigator.userAgent)) {
-            browserVersionLink.href = "intent://mhines7986.github.io/GFDH-Mobile-App/index.html#Intent;scheme=https;package=com.android.chrome;end";
+            browserVersionLink.href = "intent://mhines7986.github.io/GFDH-Mobile-App/index.html#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fmhines7986.github.io%2FGFDH-Mobile-App%2F;end";
         }
         if (isStandalone) {
             installHelp.textContent = "This is the installed app. To install again, remove this app, open the browser version, then use Chrome's three-dot menu and Add to Home screen.";
@@ -117,6 +121,16 @@
 
             installHelp.textContent = "Android: open Chrome's menu and choose Add to Home screen. iPhone/iPad: tap Share, then Add to Home Screen.";
             showSaved("Use your browser's Add to Home Screen option.");
+        });
+
+        copyBrowserUrl.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(browserUrl);
+                showSaved("Browser URL copied.");
+            } catch {
+                installHelp.textContent = browserUrl;
+                showSaved("Copy the URL above into Chrome.");
+            }
         });
 
         if ("serviceWorker" in navigator) {
