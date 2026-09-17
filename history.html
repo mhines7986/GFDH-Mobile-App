@@ -44,10 +44,26 @@
                     </div>
                     <h2>${parts[0]}</h2>
                     ${parts.slice(1).join(" - ") ? `<p>${parts.slice(1).join(" - ")}</p>` : ""}
+                    <div class="history-reactions" aria-label="Rate this activity">
+                        <button class="reaction-button ${activity.rating === "up" ? "selected" : ""}" data-rating="up" data-history-index="${index}" aria-label="Like this activity" title="Like this activity">&#128077;</button>
+                        <button class="reaction-button ${activity.rating === "down" ? "selected" : ""}" data-rating="down" data-history-index="${index}" aria-label="Dislike this activity" title="Dislike this activity">&#128078;</button>
+                    </div>
                 `;
                 historyList.appendChild(item);
             });
         }
+
+        historyList.addEventListener("click", (event) => {
+            const button = event.target.closest(".reaction-button");
+            if (!button) return;
+
+            const history = JSON.parse(localStorage.getItem("activityHistory") || "[]");
+            const item = history[Number(button.dataset.historyIndex)];
+            if (!item) return;
+            item.rating = item.rating === button.dataset.rating ? null : button.dataset.rating;
+            localStorage.setItem("activityHistory", JSON.stringify(history));
+            renderHistory();
+        });
 
         clearHistoryBtn.addEventListener("click", () => {
             localStorage.removeItem("activityHistory");

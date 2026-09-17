@@ -636,9 +636,11 @@
         function saveActivityToHistory(activity) {
             const history = JSON.parse(localStorage.getItem("activityHistory") || "[]");
             history.unshift({
+                id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
                 category: activity.category,
                 text: activity.text,
-                pickedAt: new Date().toISOString()
+                pickedAt: new Date().toISOString(),
+                rating: null
             });
             localStorage.setItem("activityHistory", JSON.stringify(history.slice(0, 100)));
         }

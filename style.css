@@ -584,6 +584,40 @@ button:active:not(:disabled) {
     line-height: 1.4;
 }
 
+.history-reactions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.reaction-button {
+    width: 42px;
+    height: 38px;
+    border: 1px solid rgba(167, 139, 250, 0.42);
+    border-radius: 10px;
+    background: rgba(139, 92, 246, 0.1);
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.reaction-button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(196, 181, 253, 0.86);
+    background: rgba(139, 92, 246, 0.24);
+}
+
+.reaction-button.selected[data-rating="up"] {
+    border-color: #4ade80;
+    background: rgba(34, 197, 94, 0.22);
+}
+
+.reaction-button.selected[data-rating="down"] {
+    border-color: #fb7185;
+    background: rgba(239, 68, 68, 0.22);
+}
+
 .history-empty {
     margin: 36px 0;
     color: #c4b5fd;
