@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest-devil.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="devil-apple-touch-icon.png">
+    <meta name="theme-color" content="#110b25">
 </head>
 <body class="settings-page">
     <main class="settings-container">
@@ -33,6 +36,11 @@
         <section class="settings-actions">
             <button class="secondary" id="clearHistory" type="button">Clear History</button>
         </section>
+        <section class="install-settings" aria-labelledby="installTitle">
+            <h2 id="installTitle">Save to Home Screen</h2>
+            <p id="installHelp">Add the game to your device for quick access.</p>
+            <button class="secondary" id="installApp" type="button">Install App</button>
+        </section>
         <p class="settings-status" id="settingsStatus" role="status"></p>
     </main>
     <nav class="bottom-nav" aria-label="Main navigation">
@@ -44,6 +52,9 @@
         const defaultDuration = document.getElementById("defaultDuration");
         const brightnessMode = document.getElementById("brightnessMode");
         const settingsStatus = document.getElementById("settingsStatus");
+        const installApp = document.getElementById("installApp");
+        const installHelp = document.getElementById("installHelp");
+        let deferredInstallPrompt = null;
 
         defaultDuration.value = localStorage.getItem("defaultDuration") || "120";
         brightnessMode.value = localStorage.getItem("brightnessMode") || "standard";
@@ -69,6 +80,33 @@
             localStorage.removeItem("activityHistory");
             showSaved("History cleared.");
         });
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+        });
+
+        installApp.addEventListener("click", async () => {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                await deferredInstallPrompt.userChoice;
+                deferredInstallPrompt = null;
+                showSaved("Install request sent.");
+                return;
+            }
+
+            if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
+                showSaved("The game is already saved to your Home Screen.");
+                return;
+            }
+
+            installHelp.textContent = "Android: open your browser menu and choose Add to Home screen. iPhone/iPad: tap Share, then Add to Home Screen.";
+            showSaved("Use your browser's Add to Home Screen option.");
+        });
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js").catch(() => {});
+        }
 
     </script>
 </body>

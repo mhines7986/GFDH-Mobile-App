@@ -768,6 +768,26 @@ button:active:not(:disabled) {
     flex-wrap: wrap;
 }
 
+.install-settings {
+    margin-top: 24px;
+    padding: 20px;
+    border: 1px solid rgba(167, 139, 250, 0.38);
+    border-radius: 16px;
+    background: rgba(8, 9, 28, 0.82);
+}
+
+.install-settings h2 {
+    margin: 0;
+    color: #f5f1ff;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+}
+
+.install-settings p {
+    margin: 6px 0 16px;
+    color: #c4b5fd;
+}
+
 .settings-status {
     min-height: 1.4em;
     margin-top: 18px;

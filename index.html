@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest-devil.json">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="devil-apple-touch-icon.png">
     <meta name="theme-color" content="#110b25">
@@ -662,13 +663,7 @@
         updateTimer();
 
         if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.getRegistrations().then((registrations) => {
-                registrations.forEach((registration) => registration.unregister());
-            });
-        }
-
-        if ("caches" in window) {
-            caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
+            navigator.serviceWorker.register("sw.js").catch(() => {});
         }
     </script>
 </body>
