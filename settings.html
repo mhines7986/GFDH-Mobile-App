@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Game for Disgusting Humans</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="settings-page">
+    <main class="settings-container">
+        <h1 class="history-title">Settings</h1>
+        <section class="settings-list" aria-label="Game settings">
+            <label class="setting-row" for="defaultDuration">
+                <span><strong>Default timer</strong><small>Used when the game opens or resets.</small></span>
+                <select id="defaultDuration">
+                    <option value="60">1 Min</option>
+                    <option value="120">2 Min</option>
+                    <option value="180">3 Min</option>
+                    <option value="300">5 Min</option>
+                </select>
+            </label>
+            <label class="setting-row" for="brightnessMode">
+                <span><strong>Display brightness</strong><small>Adjust the intensity of the game background.</small></span>
+                <select id="brightnessMode">
+                    <option value="standard">Standard</option>
+                    <option value="soft">Soft</option>
+                </select>
+            </label>
+        </section>
+        <section class="settings-actions">
+            <button class="secondary" id="clearHistory" type="button">Clear History</button>
+            <button class="secondary" id="clearPrompt" type="button">Show Install Prompt Again</button>
+        </section>
+        <p class="settings-status" id="settingsStatus" role="status"></p>
+    </main>
+    <nav class="bottom-nav" aria-label="Main navigation">
+        <a class="bottom-nav-link" href="index.html"><span aria-hidden="true">&#127918;</span>Game</a>
+        <a class="bottom-nav-link" href="history.html"><span aria-hidden="true">&#128202;</span>History</a>
+        <a class="bottom-nav-link active" href="settings.html"><span aria-hidden="true">&#9881;</span>Settings</a>
+    </nav>
+    <script>
+        const defaultDuration = document.getElementById("defaultDuration");
+        const brightnessMode = document.getElementById("brightnessMode");
+        const settingsStatus = document.getElementById("settingsStatus");
+
+        defaultDuration.value = localStorage.getItem("defaultDuration") || "120";
+        brightnessMode.value = localStorage.getItem("brightnessMode") || "standard";
+        document.body.classList.toggle("soft-brightness", brightnessMode.value === "soft");
+
+        function showSaved(message) {
+            settingsStatus.textContent = message;
+            setTimeout(() => settingsStatus.textContent = "", 1800);
+        }
+
+        defaultDuration.addEventListener("change", () => {
+            localStorage.setItem("defaultDuration", defaultDuration.value);
+            showSaved("Default timer saved.");
+        });
+
+        brightnessMode.addEventListener("change", () => {
+            localStorage.setItem("brightnessMode", brightnessMode.value);
+            document.body.classList.toggle("soft-brightness", brightnessMode.value === "soft");
+            showSaved("Display setting saved.");
+        });
+
+        document.getElementById("clearHistory").addEventListener("click", () => {
+            localStorage.removeItem("activityHistory");
+            showSaved("History cleared.");
+        });
+
+        document.getElementById("clearPrompt").addEventListener("click", () => {
+            localStorage.removeItem("dismissedInstallPrompt");
+            showSaved("Install prompt will appear when available.");
+        });
+    </script>
+</body>
+</html>

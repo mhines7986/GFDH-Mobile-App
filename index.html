@@ -15,6 +15,7 @@
     <meta name="theme-color" content="#110b25">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
 
@@ -70,6 +71,21 @@
 
         <a class="history-button" href="history.html">History</a>
     </div>
+
+    <aside class="install-banner" id="installBanner" hidden>
+        <div>
+            <strong>Install the game</strong>
+            <span>Keep it ready for offline play.</span>
+        </div>
+        <button class="secondary" id="installButton" type="button">Install</button>
+        <button class="install-dismiss" id="dismissInstall" type="button" aria-label="Dismiss install prompt">&times;</button>
+    </aside>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+        <a class="bottom-nav-link active" href="index.html"><span aria-hidden="true">&#127918;</span>Game</a>
+        <a class="bottom-nav-link" href="history.html"><span aria-hidden="true">&#128202;</span>History</a>
+        <a class="bottom-nav-link" href="settings.html"><span aria-hidden="true">&#9881;</span>Settings</a>
+    </nav>
 
     <!-- FULLSCREEN ACTIVITY POP-OUT MODAL -->
     <div class="modal-backdrop" id="activityModalBackdrop">
@@ -325,7 +341,7 @@
         ];
 
         let selectedCategory = "Kinky";
-        let selectedDuration = 120;
+        let selectedDuration = Number(localStorage.getItem("defaultDuration") || 120);
         let remaining = selectedDuration;
         let timerInterval = null;
         let spinning = false;
@@ -583,6 +599,8 @@
             const chosen = pool[Math.floor(Math.random() * pool.length)];
             const finalActivity = chosen.text;
 
+            if (navigator.vibrate) navigator.vibrate([35, 25, 35]);
+
             saveActivityToHistory(chosen);
 
             // Apply spin to both main and modal slots
@@ -640,7 +658,8 @@
                 category: activity.category,
                 text: activity.text,
                 pickedAt: new Date().toISOString(),
-                rating: null
+                rating: null,
+                favorite: false
             });
             localStorage.setItem("activityHistory", JSON.stringify(history.slice(0, 100)));
         }
@@ -648,7 +667,38 @@
         // Initialize display with empty activity slots and default timer
         clearActivity();
         updateCategoryBadges();
+        document.querySelectorAll(".timer-opt-btn").forEach((btn) => {
+            btn.classList.toggle("active", Number(btn.dataset.time) === selectedDuration);
+        });
         updateTimer();
+
+        let deferredInstallPrompt;
+        const installBanner = document.getElementById("installBanner");
+        const installButton = document.getElementById("installButton");
+        const dismissInstall = document.getElementById("dismissInstall");
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            if (!localStorage.getItem("dismissedInstallPrompt")) installBanner.hidden = false;
+        });
+
+        installButton.addEventListener("click", async () => {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            installBanner.hidden = true;
+        });
+
+        dismissInstall.addEventListener("click", () => {
+            localStorage.setItem("dismissedInstallPrompt", "true");
+            installBanner.hidden = true;
+        });
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js").catch(() => {});
+        }
     </script>
 </body>
 </html>
