@@ -531,6 +531,10 @@ button:active:not(:disabled) {
     color: #f5f1ff;
     font-family: 'Great Vibes', cursive, sans-serif;
     font-size: clamp(3rem, 10vw, 5rem);
+    background: linear-gradient(135deg, #f5f1ff 10%, #ddd6fe 50%, #8b5cf6 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .history-count {
