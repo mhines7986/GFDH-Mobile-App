@@ -23,11 +23,8 @@ body {
     width: min(92vw, 620px);
     padding: 36px 34px;
     text-align: center;
-    border: 1px solid rgba(167, 139, 250, 0.32);
     border-radius: 28px;
-    background: rgba(12, 8, 29, 0.84);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8);
+    background: transparent;
 }
 
 h1 {
