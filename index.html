@@ -67,6 +67,8 @@
             <button class="secondary start-timer-btn">Start Timer</button>
             <button class="secondary reset-timer-btn">Reset Timer</button>
         </div>
+
+        <a class="history-button" href="history.html">History</a>
     </div>
 
     <!-- FULLSCREEN ACTIVITY POP-OUT MODAL -->
@@ -581,6 +583,8 @@
             const chosen = pool[Math.floor(Math.random() * pool.length)];
             const finalActivity = chosen.text;
 
+            saveActivityToHistory(chosen);
+
             // Apply spin to both main and modal slots
             titleSlot.classList.add("spinning");
             descriptionSlot.classList.add("spinning");
@@ -628,6 +632,16 @@
                 randomBtn.disabled = false;
             }, 7100);
         });
+
+        function saveActivityToHistory(activity) {
+            const history = JSON.parse(localStorage.getItem("activityHistory") || "[]");
+            history.unshift({
+                category: activity.category,
+                text: activity.text,
+                pickedAt: new Date().toISOString()
+            });
+            localStorage.setItem("activityHistory", JSON.stringify(history.slice(0, 100)));
+        }
 
         // Initialize display with empty activity slots and default timer
         clearActivity();

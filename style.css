@@ -482,6 +482,126 @@ button:active:not(:disabled) {
     transform: translateY(1px) scale(0.98);
 }
 
+.history-button {
+    display: block;
+    width: min(100%, 260px);
+    margin: 28px auto 0;
+    padding: 14px 22px;
+    border: 1px solid rgba(196, 181, 253, 0.55);
+    border-radius: 14px;
+    background: rgba(139, 92, 246, 0.16);
+    color: #ede9fe;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.history-button:hover,
+.back-link:hover {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.history-button:hover {
+    background: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.28);
+}
+
+.history-page {
+    align-items: flex-start;
+    padding: 32px 16px;
+}
+
+.history-container {
+    width: min(100%, 760px);
+    text-align: center;
+}
+
+.back-link {
+    color: #c4b5fd;
+    font-weight: 800;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(196, 181, 253, 0.55);
+    padding-bottom: 3px;
+}
+
+.history-title {
+    margin: 26px 0 4px;
+    color: #f5f1ff;
+    font-family: 'Great Vibes', cursive, sans-serif;
+    font-size: clamp(3rem, 10vw, 5rem);
+}
+
+.history-count {
+    margin: 0 0 24px;
+    color: #c4b5fd;
+}
+
+.history-list {
+    display: grid;
+    gap: 14px;
+    text-align: left;
+}
+
+.history-item {
+    padding: 18px 20px;
+    border: 1px solid rgba(167, 139, 250, 0.38);
+    border-radius: 16px;
+    background: rgba(8, 9, 28, 0.82);
+}
+
+.history-item-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.history-number {
+    color: #a78bfa;
+    font-weight: 800;
+}
+
+.history-item time {
+    margin-left: auto;
+    color: #a5a0bc;
+    font-size: 0.82rem;
+}
+
+.history-item h2 {
+    margin: 12px 0 4px;
+    color: #f5f1ff;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem;
+}
+
+.history-item p {
+    margin: 0;
+    color: #ddd6fe;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    line-height: 1.4;
+}
+
+.history-empty {
+    margin: 36px 0;
+    color: #c4b5fd;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+}
+
+.clear-history-btn {
+    margin-top: 24px;
+}
+
+@media (max-width: 520px) {
+    .history-item time {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
 button:focus-visible {
     outline: 3px solid #f0abfc;
     outline-offset: 3px;
