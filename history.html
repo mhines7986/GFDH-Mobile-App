@@ -70,6 +70,15 @@
             renderHistory();
         });
 
+        window.addEventListener("storage", (event) => {
+            if (event.key === "activityHistory") renderHistory();
+        });
+
+        window.addEventListener("pageshow", renderHistory);
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) renderHistory();
+        });
+
         renderHistory();
     </script>
 </body>
