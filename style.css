@@ -483,30 +483,9 @@ button:active:not(:disabled) {
     transform: translateY(1px) scale(0.98);
 }
 
-.history-button {
-    display: block;
-    width: min(100%, 260px);
-    margin: 28px auto 0;
-    padding: 14px 22px;
-    border: 1px solid rgba(196, 181, 253, 0.55);
-    border-radius: 14px;
-    background: rgba(139, 92, 246, 0.16);
-    color: #ede9fe;
-    font-weight: 800;
-    text-align: center;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.history-button:hover,
 .back-link:hover {
     color: #ffffff;
     border-color: #ffffff;
-}
-
-.history-button:hover {
-    background: rgba(139, 92, 246, 0.3);
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.28);
 }
 
 .history-page {
