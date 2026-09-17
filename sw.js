@@ -1,11 +1,11 @@
-const CACHE_NAME = "gfdh-game-v2";
+const CACHE_NAME = "gfdh-game-v3";
 const APP_SHELL = [
     "./",
     "./index.html",
     "./history.html",
     "./settings.html",
     "./style.css",
-    "./manifest-devil.json",
+    "./manifest-dh.json",
     "./icon.svg",
     "./devil-icon-192.png",
     "./devil-icon-512.png",

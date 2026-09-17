@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest-devil.json">
+    <link rel="manifest" href="manifest-dh.json">
     <link rel="apple-touch-icon" sizes="180x180" href="devil-apple-touch-icon.png">
     <meta name="theme-color" content="#110b25">
 </head>
@@ -95,12 +95,7 @@
                 return;
             }
 
-            if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) {
-                showSaved("The game is already saved to your Home Screen.");
-                return;
-            }
-
-            installHelp.textContent = "Android: open your browser menu and choose Add to Home screen. iPhone/iPad: tap Share, then Add to Home Screen.";
+            installHelp.textContent = "Android: open Chrome's menu and choose Add to Home screen. iPhone/iPad: tap Share, then Add to Home Screen.";
             showSaved("Use your browser's Add to Home Screen option.");
         });
 

@@ -1,0 +1,26 @@
+{
+  "name": "Alexis & Mark's Game for Disgusting Humans",
+  "short_name": "Disgusting Humans",
+  "description": "A game for disgusting humans.",
+  "id": "./dh-app",
+  "start_url": "./index.html?app=dh",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#110b25",
+  "background_color": "#03020a",
+  "icons": [
+    {
+      "src": "devil-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "devil-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
