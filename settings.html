@@ -19,6 +19,7 @@
             <h2 id="installTitle">Save to Home Screen</h2>
             <p id="installHelp">Add the game to your device for quick access.</p>
             <button class="main install-app-button" id="installApp" type="button">Install App</button>
+            <a class="browser-version-link" id="browserVersionLink" href="./index.html" target="_blank" rel="noopener">Open browser version</a>
         </section>
         <section class="settings-list" aria-label="Game settings">
             <label class="setting-row" for="defaultDuration">
@@ -54,7 +55,17 @@
         const settingsStatus = document.getElementById("settingsStatus");
         const installApp = document.getElementById("installApp");
         const installHelp = document.getElementById("installHelp");
+        const browserVersionLink = document.getElementById("browserVersionLink");
         let deferredInstallPrompt = null;
+
+        const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+        if (isStandalone) {
+            installHelp.textContent = "This is the installed app. To install again, remove this app, open the browser version, then use Chrome's three-dot menu and Add to Home screen.";
+            installApp.textContent = "Reinstall from Chrome";
+            browserVersionLink.hidden = false;
+        } else {
+            browserVersionLink.hidden = true;
+        }
 
         defaultDuration.value = localStorage.getItem("defaultDuration") || "120";
         brightnessMode.value = localStorage.getItem("brightnessMode") || "standard";
@@ -87,6 +98,12 @@
         });
 
         installApp.addEventListener("click", async () => {
+            if (isStandalone) {
+                browserVersionLink.focus();
+                showSaved("Open the browser version after removing this app.");
+                return;
+            }
+
             if (deferredInstallPrompt) {
                 deferredInstallPrompt.prompt();
                 await deferredInstallPrompt.userChoice;

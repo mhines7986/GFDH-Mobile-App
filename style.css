@@ -786,6 +786,19 @@ button:active:not(:disabled) {
     font-size: 1.35rem;
 }
 
+.browser-version-link {
+    display: block;
+    margin-top: 14px;
+    color: #c4b5fd;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.browser-version-link:hover {
+    color: #ffffff;
+}
+
 .install-settings h2 {
     margin: 0;
     color: #f5f1ff;
