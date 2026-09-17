@@ -15,6 +15,11 @@
 <body class="settings-page">
     <main class="settings-container">
         <h1 class="history-title">Settings</h1>
+        <section class="install-settings install-settings-primary" aria-labelledby="installTitle">
+            <h2 id="installTitle">Save to Home Screen</h2>
+            <p id="installHelp">Add the game to your device for quick access.</p>
+            <button class="main install-app-button" id="installApp" type="button">Install App</button>
+        </section>
         <section class="settings-list" aria-label="Game settings">
             <label class="setting-row" for="defaultDuration">
                 <span><strong>Default timer</strong><small>Used when the game opens or resets.</small></span>
@@ -35,11 +40,6 @@
         </section>
         <section class="settings-actions">
             <button class="secondary" id="clearHistory" type="button">Clear History</button>
-        </section>
-        <section class="install-settings" aria-labelledby="installTitle">
-            <h2 id="installTitle">Save to Home Screen</h2>
-            <p id="installHelp">Add the game to your device for quick access.</p>
-            <button class="secondary" id="installApp" type="button">Install App</button>
         </section>
         <p class="settings-status" id="settingsStatus" role="status"></p>
     </main>
