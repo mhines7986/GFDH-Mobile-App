@@ -32,7 +32,6 @@
         </section>
         <section class="settings-actions">
             <button class="secondary" id="clearHistory" type="button">Clear History</button>
-            <button class="secondary" id="clearPrompt" type="button">Show Install Prompt Again</button>
         </section>
         <p class="settings-status" id="settingsStatus" role="status"></p>
     </main>
@@ -71,10 +70,6 @@
             showSaved("History cleared.");
         });
 
-        document.getElementById("clearPrompt").addEventListener("click", () => {
-            localStorage.removeItem("dismissedInstallPrompt");
-            showSaved("Install prompt will appear when available.");
-        });
     </script>
 </body>
 </html>

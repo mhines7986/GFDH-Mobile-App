@@ -72,15 +72,6 @@
         <a class="history-button" href="history.html">History</a>
     </div>
 
-    <aside class="install-banner" id="installBanner" hidden>
-        <div>
-            <strong>Install the game</strong>
-            <span>Keep it ready for offline play.</span>
-        </div>
-        <button class="secondary" id="installButton" type="button">Install</button>
-        <button class="install-dismiss" id="dismissInstall" type="button" aria-label="Dismiss install prompt">&times;</button>
-    </aside>
-
     <nav class="bottom-nav" aria-label="Main navigation">
         <a class="bottom-nav-link active" href="index.html"><span aria-hidden="true">&#127918;</span>Game</a>
         <a class="bottom-nav-link" href="history.html"><span aria-hidden="true">&#128202;</span>History</a>
@@ -671,30 +662,6 @@
             btn.classList.toggle("active", Number(btn.dataset.time) === selectedDuration);
         });
         updateTimer();
-
-        let deferredInstallPrompt;
-        const installBanner = document.getElementById("installBanner");
-        const installButton = document.getElementById("installButton");
-        const dismissInstall = document.getElementById("dismissInstall");
-
-        window.addEventListener("beforeinstallprompt", (event) => {
-            event.preventDefault();
-            deferredInstallPrompt = event;
-            if (!localStorage.getItem("dismissedInstallPrompt")) installBanner.hidden = false;
-        });
-
-        installButton.addEventListener("click", async () => {
-            if (!deferredInstallPrompt) return;
-            deferredInstallPrompt.prompt();
-            await deferredInstallPrompt.userChoice;
-            deferredInstallPrompt = null;
-            installBanner.hidden = true;
-        });
-
-        dismissInstall.addEventListener("click", () => {
-            localStorage.setItem("dismissedInstallPrompt", "true");
-            installBanner.hidden = true;
-        });
 
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("sw.js").catch(() => {});
