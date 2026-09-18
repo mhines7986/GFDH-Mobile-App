@@ -1,4 +1,4 @@
-const CACHE_NAME = "gfdh-game-v3";
+const CACHE_NAME = "gfdh-game-v4";
 const APP_SHELL = [
     "./",
     "./index.html",
