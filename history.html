@@ -19,6 +19,7 @@
             <button class="filter-button" data-filter="favorites" type="button">Favorites</button>
             <button class="filter-button" data-filter="liked" type="button">Liked</button>
             <button class="filter-button" data-filter="disliked" type="button">Disliked</button>
+            <button class="filter-button" data-filter="saved" type="button">Save for Later</button>
         </div>
         <section class="history-list" id="historyList" aria-live="polite"></section>
         <div class="history-empty" id="historyEmpty">No actions have been picked yet.</div>
@@ -43,12 +44,14 @@
             const history = storedHistory.map((activity, index) => ({
                 ...activity,
                 id: activity.id || `${activity.pickedAt || Date.now()}-${index}`,
-                favorite: activity.favorite === true
+                favorite: activity.favorite === true,
+                savedForLater: activity.savedForLater === true
             }));
             const visibleHistory = history.filter((activity) => {
                 if (activeFilter === "favorites") return activity.favorite;
                 if (activeFilter === "liked") return activity.rating === "up";
                 if (activeFilter === "disliked") return activity.rating === "down";
+                if (activeFilter === "saved") return activity.savedForLater;
                 return true;
             });
             historyList.innerHTML = "";
@@ -70,6 +73,7 @@
                     <h2>${parts[0]}</h2>
                     ${parts.slice(1).join(" - ") ? `<p>${parts.slice(1).join(" - ")}</p>` : ""}
                     <div class="history-reactions" aria-label="Rate this activity">
+                        <button class="save-later-button ${activity.savedForLater ? "selected" : ""}" data-action="save-later" data-history-id="${activity.id}" aria-label="${activity.savedForLater ? "Remove from save for later" : "Save for later"}" title="${activity.savedForLater ? "Remove from save for later" : "Save for later"}">Save for Later</button>
                         <button class="reaction-button ${activity.rating === "up" ? "selected" : ""}" data-action="rating" data-rating="up" data-history-id="${activity.id}" aria-label="Like this activity" title="Like this activity">&#128077;</button>
                         <button class="reaction-button ${activity.rating === "down" ? "selected" : ""}" data-action="rating" data-rating="down" data-history-id="${activity.id}" aria-label="Dislike this activity" title="Dislike this activity">&#128078;</button>
                     </div>
@@ -87,6 +91,8 @@
             if (!item) return;
             if (button.dataset.action === "favorite") {
                 item.favorite = item.favorite !== true;
+            } else if (button.dataset.action === "save-later") {
+                item.savedForLater = item.savedForLater !== true;
             } else {
                 item.rating = item.rating === button.dataset.rating ? null : button.dataset.rating;
             }

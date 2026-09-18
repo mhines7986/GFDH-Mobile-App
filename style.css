@@ -607,8 +607,29 @@ button:active:not(:disabled) {
 
 .history-reactions {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
     margin-top: 16px;
+}
+
+.save-later-button {
+    padding: 9px 12px;
+    border: 1px solid rgba(167, 139, 250, 0.42);
+    border-radius: 10px;
+    background: rgba(139, 92, 246, 0.1);
+    color: #f5f1ff;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.save-later-button.selected {
+    border-color: #fbbf24;
+    background: rgba(251, 191, 36, 0.18);
+    color: #fde68a;
 }
 
 .reaction-button {
@@ -632,6 +653,7 @@ button:active:not(:disabled) {
     filter: hue-rotate(320deg) saturate(2.4);
 }
 
+.save-later-button:hover,
 .reaction-button:hover {
     transform: translateY(-2px);
     border-color: rgba(196, 181, 253, 0.86);
